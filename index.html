@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>俺の本棚</title>
+  <meta name="description" content="今まで読んだ本を、棚に並べて紹介するページです。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1 class="site-title">俺の本棚</h1>
+      <p class="site-lead">これまでに読んできた本を、棚ごとに並べています。背表紙を押すと、その本の詳細と感想が開きます。（この文章は仮です）</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="bookcase" class="bookcase"></div>
+    <noscript><p>本棚を表示するには JavaScript を有効にしてください。</p></noscript>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>哲学と、考えるための本を中心に読んでいます。（この自己紹介は仮です）</p>
+    </div>
+  </footer>
+
+  <dialog id="detail" class="detail" aria-labelledby="detail-title">
+    <div class="detail-bar">
+      <button type="button" id="detail-close" class="detail-close">閉じる</button>
+    </div>
+    <div class="detail-body">
+      <div id="detail-cover" class="detail-cover"></div>
+      <div class="detail-text">
+        <h2 id="detail-title" class="detail-title"></h2>
+        <dl class="detail-meta">
+          <dt>著者</dt>
+          <dd id="detail-author"></dd>
+          <dt>出版社</dt>
+          <dd id="detail-publisher"></dd>
+        </dl>
+        <h3 class="detail-heading">感想</h3>
+        <p id="detail-comment" class="detail-comment"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="books.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

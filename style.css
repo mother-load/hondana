@@ -1,0 +1,400 @@
+/* ===== 色と大きさの設定（ここを変えるとサイト全体の見た目が変わる） ===== */
+:root {
+  --paper: #f4efe6;      /* 背景：生成りの紙 */
+  --paper-deep: #ebe3d5; /* 少し濃い紙色 */
+  --ink: #2b2622;        /* 文字 */
+  --muted: #6f655b;      /* 控えめな文字 */
+  --accent: #7b2d26;     /* アクセント：臙脂 */
+  --line: #d6cbb9;       /* 細い線 */
+  --row-h: 240px;        /* 棚1段の高さ */
+  --board: 14px;         /* 棚板の厚さ */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  font-size: 17px;
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+
+/* 詳細を開いている間は後ろのページを動かさない */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== ヘッダー ===== */
+.site-header {
+  padding: 72px 0 40px;
+}
+
+.site-title {
+  margin: 0;
+  font-size: clamp(2.2rem, 7vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.3;
+}
+
+.site-title::after {
+  content: "";
+  display: block;
+  width: 3em;
+  height: 2px;
+  margin-top: 18px;
+  background: var(--accent);
+}
+
+.site-lead {
+  max-width: 34em;
+  margin: 20px 0 0;
+  color: var(--muted);
+}
+
+/* ===== 本棚 ===== */
+.bookcase {
+  padding: 24px 0 56px;
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: 8.5em 1fr;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 48px;
+}
+
+.shelf-name {
+  margin: 0;
+  padding-bottom: calc(var(--board) + 4px);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--line);
+}
+
+/* 本が並ぶ部分。段ごとに棚板を線で描く */
+.shelf-books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--board) 3px;
+  padding: 0 12px var(--board);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 var(--row-h),
+      #6e4f33 var(--row-h) calc(var(--row-h) + 2px),
+      #a5805b calc(var(--row-h) + 2px) calc(var(--row-h) + 6px),
+      #9a7652 calc(var(--row-h) + 6px) calc(var(--row-h) + 11px),
+      #7a5a3c calc(var(--row-h) + 11px) calc(var(--row-h) + var(--board))
+    );
+}
+
+.slot {
+  display: flex;
+  align-items: flex-end;
+  height: var(--row-h);
+}
+
+/* 背表紙 */
+.spine {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: var(--w);
+  height: var(--h);
+  padding: 18px 0;
+  border: 0;
+  border-radius: 2px 2px 0 0;
+  background: var(--c);
+  color: var(--fg);
+  font: inherit;
+  /* タイトルが長い本は、背表紙に収まるよう文字を小さくする（10〜15px） */
+  font-size: clamp(10px, calc((var(--row-h) * var(--hp) - 40px) / var(--len) / 1.08), 15px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  writing-mode: vertical-rl;
+  cursor: pointer;
+  box-shadow:
+    inset 2px 0 0 rgba(255, 255, 255, 0.14),
+    inset -3px 0 0 rgba(0, 0, 0, 0.18);
+  transition: transform 0.18s ease;
+}
+
+.spine-title {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.spine.is-long {
+  font-size: clamp(11px, calc((var(--row-h) * var(--hp) - 40px) / var(--len) / 1.08), 13px);
+  line-height: 1.25;
+}
+
+.spine.is-long .spine-title {
+  max-block-size: 100%;
+  white-space: normal;
+}
+
+/* 背表紙の飾り線（本ごとに有無が決まる） */
+.spine[data-band="1"]::before,
+.spine[data-band="1"]::after,
+.spine[data-band="2"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  opacity: 0.45;
+}
+
+.spine::before { top: 7px; }
+.spine::after { bottom: 7px; }
+
+.spine:hover,
+.spine:focus-visible {
+  transform: translateY(-6px);
+}
+
+.spine:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===== フッター ===== */
+.site-footer {
+  padding: 32px 0 48px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ===== 詳細表示 ===== */
+.detail {
+  width: calc(100% - 40px);
+  max-width: 760px;
+  max-height: calc(100% - 40px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.detail[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail::backdrop {
+  background: rgba(43, 34, 26, 0.55);
+}
+
+.detail-bar {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px 0;
+}
+
+.detail-close {
+  padding: 4px 14px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.detail-close:hover,
+.detail-close:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.detail-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 32px;
+  padding: 16px 36px 36px;
+  overflow-y: auto;
+}
+
+.detail-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+}
+
+/* 表紙画像がないときに作る表紙 */
+.made-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 1 / 1.45;
+  padding: 14px;
+  background: var(--c);
+  color: var(--fg);
+  box-shadow: inset 6px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.made-cover-frame {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 16px 12px 14px;
+  border: 1px solid currentColor;
+  opacity: 0.95;
+}
+
+.made-cover-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.made-cover-author {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.detail-title {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  margin: 0 0 28px;
+  font-size: 0.95rem;
+}
+
+.detail-meta dt {
+  color: var(--muted);
+}
+
+.detail-meta dd {
+  margin: 0;
+}
+
+.detail-heading {
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.detail-comment {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.detail-comment.is-empty {
+  color: var(--muted);
+}
+
+/* ===== スマホ（幅 640px 以下） ===== */
+@media (max-width: 640px) {
+  :root {
+    --row-h: 210px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .site-header {
+    padding: 48px 0 24px;
+  }
+
+  .shelf {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .shelf-name {
+    padding-bottom: 4px;
+  }
+
+  .shelf-books {
+    padding: 0 6px var(--board);
+  }
+
+  /* 詳細は画面いっぱいに開く */
+  .detail {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .detail-body {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 8px 20px 40px;
+  }
+
+  .detail-cover {
+    width: 160px;
+    margin: 0 auto;
+  }
+
+  .detail-title {
+    font-size: 1.3rem;
+  }
+}
+
+/* 動きを減らす設定の人には動きを出さない */
+@media (prefers-reduced-motion: reduce) {
+  .spine {
+    transition: none;
+  }
+}
