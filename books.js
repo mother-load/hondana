@@ -18,7 +18,7 @@ const BOOKS = [
     isbn: "9784150503765",
     shelf: "justice",
     cover: null,
-    comment: "",
+    comment: "ああああ",
   },
   {
     title: "自由論",
